@@ -19,7 +19,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="">
+      <div className="container" style={{ width: "1200px" }}>
         <Pics onSubmit={this.onSearchSubmit} />
         found:{this.state.img.length}
         <div class="">

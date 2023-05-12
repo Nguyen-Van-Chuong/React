@@ -12,7 +12,7 @@ class Pics extends Component {
 
   render() {
     return (
-      <div className="ui segment" style={{ width: "630px" }}>
+      <div className="ui segment" style={{ width: "630px", margin: "0 auto" }}>
         <form action="" onSubmit={this.handleSubmit} className="ui form">
           <div className="field">
             <label htmlFor="">Image search</label>
