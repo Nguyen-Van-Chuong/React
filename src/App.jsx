@@ -1,15 +1,10 @@
 import "./App.css";
-import { Pics } from "./components/Pics/index";
-import Time from "./components/Time";
+import TodoApp from "./components/TodoApp";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello world</h1>
-      <div className="search">
-        <Pics></Pics>
-        <Time></Time>
-      </div>
+    <div>
+      <TodoApp></TodoApp>
     </div>
   );
 }
