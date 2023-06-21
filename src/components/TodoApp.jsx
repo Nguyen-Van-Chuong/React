@@ -1,28 +1,13 @@
 import React, { Component } from "react";
 import Header from "./layouts/Header";
 import AddTodo from "./AddTodo";
+import axios from "axios";
 import { v4 } from "uuid";
 import Todos from "./Todos";
 
 class TodoApp extends Component {
   state = {
-    todos: [
-      {
-        id: 1,
-        title: "Setup development environment",
-        completed: true,
-      },
-      {
-        id: 2,
-        title: "Develop website and add content",
-        completed: false,
-      },
-      {
-        id: 3,
-        title: "Deploy to live server",
-        completed: false,
-      },
-    ],
+    todos: [],
   };
   handleCheckboxChange = (id) => {
     this.setState({
@@ -35,23 +20,30 @@ class TodoApp extends Component {
     });
   };
   deleteTodo = (id) => {
-    this.setState({
-      todos: [
-        ...this.state.todos.filter((todo) => {
-          return todo.id !== id;
-        }),
-      ],
-    });
+    axios
+      .delete("https://jsonplaceholder.typicode.com/todos/" + id)
+      .then((res) => {
+        this.setState({
+          todos: [
+            ...this.state.todos.filter((todo) => {
+              return todo.id !== id;
+            }),
+          ],
+        });
+      });
   };
   addTodo = (title) => {
-    const newTitle = {
-      id: v4(),
+    const newData = {
       title: title,
       completed: false,
     };
-    this.setState({
-      todos: [...this.state.todos, newTitle],
-    });
+    axios
+      .post("https://jsonplaceholder.typicode.com/todos", newData)
+      .then((res) => {
+        this.setState({
+          todos: [...this.state.todos, res.data],
+        });
+      });
   };
   render() {
     return (
@@ -65,6 +57,20 @@ class TodoApp extends Component {
         />
       </div>
     );
+  }
+  componentDidMount() {
+    const config = {
+      params: {
+        _limit: 10,
+      },
+    };
+    axios
+      .get("https://jsonplaceholder.typicode.com/todos", config)
+      .then((res) =>
+        this.setState({
+          todos: res.data,
+        })
+      );
   }
 }
 
