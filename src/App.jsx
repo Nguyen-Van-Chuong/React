@@ -1,10 +1,10 @@
 import "./App.css";
-import TodoApp from "./components/TodoApp";
+import StopWatch from "./components/StopWatch";
 
 function App() {
   return (
     <div>
-      <TodoApp></TodoApp>
+      <StopWatch></StopWatch>
     </div>
   );
 }
