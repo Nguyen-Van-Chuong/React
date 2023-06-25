@@ -6,6 +6,8 @@ import "./App.css";
 import HackerNews from "./components/news/HackerNews";
 import Form from "./components/forms/Form";
 import MovieSearchApp from "./components/MovieSearchApp";
+import SignUpForm from "./components/forms/SignUpForm";
+import SignUpFormV2 from "./components/forms/SignUpFormV2";
 
 function App() {
   const [show, setShow] = useState(false);
@@ -24,7 +26,8 @@ function App() {
       {/* <Blog></Blog> */}
       {/* <HackerNews></HackerNews> */}
       {/* <Form></Form> */}
-      <MovieSearchApp></MovieSearchApp>
+      {/* <MovieSearchApp></MovieSearchApp> */}
+      <SignUpFormV2></SignUpFormV2>
     </div>
   );
 }
