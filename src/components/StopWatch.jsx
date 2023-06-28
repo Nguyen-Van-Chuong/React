@@ -17,11 +17,12 @@ const StopWatch = () => {
   };
   return (
     <div>
-      {count}s
+      {" "}
+      {count}s{" "}
       <div className="">
-        <button onClick={handleStart}>Start</button>
-        <button onClick={handleStop}>Stop</button>
-      </div>
+        <button onClick={handleStart}> Start </button>{" "}
+        <button onClick={handleStop}> Stop </button>{" "}
+      </div>{" "}
     </div>
   );
 };
