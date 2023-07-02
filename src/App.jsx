@@ -1,12 +1,16 @@
-import "./App.css";
-import SongList from "./components/SongList";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { decrement, increment } from "./actions/counter";
 
-function App() {
+const App = () => {
+  const counter = useSelector((state) => state.counter);
+  const dispatch = useDispatch();
   return (
-    <div className="p-5">
-      <SongList></SongList>
+    <div>
+      <h1>Counter {counter}</h1>
+      <button onClick={() => dispatch(increment(5))}>Increment</button>
+      <button onClick={() => dispatch(decrement(5))}>Decrement</button>
     </div>
   );
-}
-
+};
 export default App;
