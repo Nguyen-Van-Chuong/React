@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        background-color: #eee;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial Narrow', Arial, sans-serif
+    }
+}
+
+.custom-radio {
+    width: 10px;
+    height: 10px;
+}
+
+/* .custom-radio> {
+    box-shadow: 0 0 0 5px white
+} */
+
+.custom-radio input:checked+div {
+    @apply bg-blue-500;
+    box-shadow: 0 0 0 2.5px white, 0 0 0 5px rgb(59 130 246 / 1);
+
+}
+
+.custom-checkbox-square {
+    width: 20px;
+    height: 20px;
+}
+
+.custom-checkbox input:checked+div .custom-checkbox-square {
+    background: rgb(59 130 246 / 1);
+
+}
