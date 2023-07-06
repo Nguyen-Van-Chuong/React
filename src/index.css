@@ -5,7 +5,8 @@
 @layer base {
     body {
         background-color: #eee;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial Narrow', Arial, sans-serif
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial Narrow', Arial, sans-serif;
+        min-height: 100vw;
     }
 }
 
