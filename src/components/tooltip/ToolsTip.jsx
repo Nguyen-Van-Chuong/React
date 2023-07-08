@@ -2,6 +2,7 @@ import { useState } from "react";
 import useHover from "../../hooks/useHover";
 import ReactDOM from "react-dom";
 
+// eslint-disable-next-line react/prop-types
 const Toolstip = ({ children, text }) => {
   const { hovered, nodeRef } = useHover();
   const [coords, setCoords] = useState({});
@@ -29,9 +30,9 @@ y:40.79999923706055 */
 function ToolstipContent({ children, coords }) {
   return ReactDOM.createPortal(
     <p
-      className="absolute inline-block p-3 text-white -translate-y-full bg-black rounded-xl"
+      className="absolute inline-block p-3 text-white -translate-y-full bg-black rounded-xl max-w-[200px] -translate-x-2/4"
       style={{
-        top: coords.top - coords.height / 2,
+        top: coords.top - coords.height / 2 + window.scrollY,
         left: coords.left + coords.width / 2,
       }}
     >
