@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { selectedSong } from "../actions";
 
 const songsReducer = () => {
   return [
