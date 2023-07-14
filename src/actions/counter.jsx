@@ -10,3 +10,9 @@ export const decrement = (number) => {
     payload: number,
   };
 };
+export const reset = (number) => {
+  return {
+    type: "RESET",
+    payload: number,
+  };
+};
