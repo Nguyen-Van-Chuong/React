@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-
 const songsReducer = () => {
   return [
     { title: "no scrubs", duration: "4:05" },
