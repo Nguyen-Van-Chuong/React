@@ -1,12 +1,13 @@
 import ModalBase from "./ModalBase";
 
 // eslint-disable-next-line react/prop-types
-const ModalAdvanced = ({ children, heading, ...props }) => {
+const ModalAdvanced = ({ children, heading, onClose, ...props }) => {
   return (
     <ModalBase {...props}>
       <span
         className="absolute top-0 right-0 w-10 h-10 bg-white rounded-full cursor-pointer -translate-y-2/4 translate-x-2/4"
-        onClick={props.onClose}
+        // eslint-disable-next-line react/prop-types
+        onClick={onClose}
       >
         <svg
           fill="none"
