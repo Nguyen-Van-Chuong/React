@@ -1,4 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Modal from "./Modal";
 
 import { calendarItems } from "../constants";
@@ -29,6 +32,19 @@ const AddNewTodo = () => {
     }
     return color;
   }
+  // const notify = () => toast.dark("Wow so easy!");
+
+  const showToast = () => {
+    toast.error("This is a success message!", {
+      position: "top-right",
+      autoClose: 3000, // Thời gian tự động đóng sau 3 giây
+      // hideProgressBar: false,
+      // closeOnClick: true,
+      // pauseOnHover: true,
+      // draggable: true,
+      // progress: undefined,
+    });
+  };
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -49,6 +65,8 @@ const AddNewTodo = () => {
       setText("");
       setDay(new Date());
       setTime(new Date());
+    } else {
+      showToast();
     }
   }
   useEffect(() => {

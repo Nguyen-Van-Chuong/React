@@ -15,7 +15,7 @@ const Todos = () => {
         {selectedProject === "next 7 days" ? (
           <Next7Day todos={todos}></Next7Day>
         ) : (
-          todos.map((todo) => <Todo todo={todo} key={todo.key}></Todo>)
+          todos.map((todo) => <Todo todo={todo} key={todo.id}></Todo>)
         )}
       </div>
     </div>

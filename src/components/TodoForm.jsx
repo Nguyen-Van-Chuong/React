@@ -5,6 +5,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { Button } from "@material-ui/core";
 
 const TodoForm = ({
   hanleSubmit,
@@ -100,7 +101,14 @@ const TodoForm = ({
               <X size={40} />
             </div>
             <div className="absolute bottom-0 left-0 w-full confirm">
-              <button className="w-full h-10 bg-blue-400">+ add to do</button>
+              <Button
+                // variant="text"
+                color="primary"
+                className="w-full h-10 text-base font-semibold leading-3 bg-blue-400"
+              >
+                Hello World
+              </Button>
+              {/* <button>+ add to do</button> */}
             </div>
           </>
         )}

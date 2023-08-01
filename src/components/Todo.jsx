@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   ArrowClockwise,
   CheckCircleFill,
@@ -12,12 +12,34 @@ import {
   collection,
   addDoc,
 } from "firebase/firestore";
+
+import { useSpring, animated, useTransition } from "react-spring";
 import { db } from "../firebase";
 import moment from "moment";
+import { TodoContext } from "../context";
 
 const Todo = ({ todo }) => {
+  // STATE
   const [hover, setHover] = useState(false);
+  // CONTEXT
+  const { setSelectedTodo, selectedTodo } = useContext(TodoContext);
+  // ANIMATE
+  const fadeIn = useSpring({
+    from: { marginTop: "-12px", opacity: 0 },
+    to: { marginTop: "0px", opacity: 1 },
+  });
+  const checkTransitions = useTransition(todo.checked, {
+    from: { position: "absolute", transform: "scale(0)" },
+    enter: { transform: "scale(1)" },
+    leave: { transform: "scale(0)" },
+  });
 
+  const handleDelete = (todo) => {
+    deleteTodo(todo.id);
+    if (selectedTodo === todo) {
+      setSelectedTodo(undefined);
+    }
+  };
   async function deleteTodo(id) {
     await deleteDoc(doc(db, "todos", id));
   }
@@ -38,22 +60,37 @@ const Todo = ({ todo }) => {
     });
   }
   return (
-    <div className="flex px-4 py-2 todo">
+    <animated.div style={fadeIn} className="flex px-4 py-2 todo">
       <div
         className="flex items-center w-full todo-container"
         onMouseLeave={() => setHover(false)}
         onMouseEnter={() => setHover(true)}
       >
-        <span className="checked" onClick={() => checkTodo(todo)}>
-          {todo.checked ? (
-            <CheckCircleFill color="#bebebe" />
-          ) : (
-            <Circle color={todo.color} />
+        <span
+          className="flex items-center justify-center"
+          onClick={() => checkTodo(todo)}
+        >
+          {checkTransitions((props, checked) =>
+            checked ? (
+              <animated.span style={props}>
+                <CheckCircleFill color="#bebebe" />
+              </animated.span>
+            ) : (
+              <animated.span style={props}>
+                <Circle color={todo.color} />
+              </animated.span>
+            )
           )}
         </span>
 
-        <div className="relative flex-1 text mx-[10px]">
-          <p style={{ color: todo.checked ? "#bebebe" : "#000000" }}>
+        <div
+          className="relative flex-1 text mx-[10px]"
+          onClick={() => setSelectedTodo(todo)}
+        >
+          <p
+            className="name"
+            style={{ color: todo.checked ? "#bebebe" : "#000000" }}
+          >
             {todo.text}
           </p>
           <span className="text-[0.8rem]">
@@ -74,13 +111,13 @@ const Todo = ({ todo }) => {
         </div>
         <div className="delete-todo">
           {(hover || todo.checked) && (
-            <span onClick={() => deleteTodo(todo.id)}>
+            <span onClick={() => handleDelete(todo)}>
               <Trash />
             </span>
           )}
         </div>
       </div>
-    </div>
+    </animated.div>
   );
 };
 

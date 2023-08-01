@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  Query,
-  query,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import moment from "moment";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 export function useTodos() {
   const [todos, setTodos] = useState([]);
@@ -65,34 +59,6 @@ export function useProjects() {
       });
       setProjects(data);
     });
-
-    // const unsubcribe = async (todos) => {
-    //   const t = await getDocs(collection(db, "projects"));
-    //   const data = t.docs.map((doc) => {
-    //     const projectName = doc.data().name;
-    //     return {
-    //       id: doc.id,
-    //       name: projectName,
-    //       numOfTodos: calculateNumOfTodos(projectName, todos),
-    //     };
-    //   });
-    //   console.log(data);
-    //   setProjects(data);
-    // };
-    // unsubcribe(todos);
-
-    // let unsubcribe = db.collection("projects").onSnapshot((snap) => {
-    //   const data = snap.docs.map((doc) => {
-    //     const projectName = doc.data().name;
-    //     return {
-    //       id: doc.id,
-    //       name: projectName,
-    //       // eslint-disable-next-line no-undef
-    //       l: calculateNumOfTodos(projectName, todos),
-    //     };
-    //   });
-    //   setProjects(data);
-    // });
     return () => unsubcribe();
   }, []);
   return projects;
@@ -113,4 +79,31 @@ export function useProjectsWithStats(projects, todos) {
     setProjectsWithStats(data);
   }, [projects, todos]);
   return projectsWithStats;
+}
+
+export function useUser() {
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const logout = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        setCurrentUser(null);
+        console.log("signout");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  return { currentUser, logout };
 }

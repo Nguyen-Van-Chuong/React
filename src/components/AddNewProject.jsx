@@ -24,10 +24,10 @@ const AddNewProject = () => {
       const q = query(projectsRef, where("name", "==", projectName));
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
+        setShowModal(false);
         await addDoc(projectsRef, {
           name: projectName,
         });
-        setShowModal(false);
         setprojectName("");
       } else {
         // eslint-disable-next-line no-restricted-globals
