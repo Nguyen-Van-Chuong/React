@@ -7,10 +7,25 @@ const App = () => {
   const dispatch = useDispatch();
   return (
     <div>
-      <h1>Counter {counter}</h1>
-      <button onClick={() => dispatch(increment(5))}>Increment</button>
-      <button onClick={() => dispatch(decrement(5))}>Decrement</button>
-      <button onClick={() => dispatch(reset(0))}>reset</button>
+      <h1 className="text-2xl font-bold">Counter {counter}</h1>
+      <button
+        onClick={() => dispatch(increment(5))}
+        className="p-3 text-white bg-green-400 "
+      >
+        Increment
+      </button>
+      <button
+        onClick={() => dispatch(decrement(5))}
+        className="p-3 text-white bg-green-400 "
+      >
+        Decrement
+      </button>
+      <button
+        onClick={() => dispatch(reset(0))}
+        className="p-3 text-white bg-green-400 "
+      >
+        reset
+      </button>
     </div>
   );
 };
