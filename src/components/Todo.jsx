@@ -94,7 +94,9 @@ const Todo = ({ todo }) => {
             {todo.text}
           </p>
           <span className="text-[0.8rem]">
-            {todo.time} - {todo.project}
+            {todo.time} -
+            <span className="capitalize"> {todo.projectName} </span>-{" "}
+            {todo.date}
           </span>
           <div
             className={`line bg-black absolute top-1/4 ${
@@ -111,7 +113,7 @@ const Todo = ({ todo }) => {
         </div>
         <div className="delete-todo">
           {(hover || todo.checked) && (
-            <span onClick={() => handleDelete(todo)}>
+            <span className="cursor-pointer" onClick={() => handleDelete(todo)}>
               <Trash />
             </span>
           )}

@@ -1,12 +1,5 @@
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import React, { createContext, useEffect, useState } from "react";
-import { auth } from "../firebase";
-import { useUser } from "../hooks";
+import React, { createContext, useMemo, useState } from "react";
+import { useUser } from "../hooks/AuthHook";
 
 const AuthContext = createContext();
 function AuthContextProvider({ children }) {
@@ -14,38 +7,19 @@ function AuthContextProvider({ children }) {
   // const [password, setPassword] = useState("");
 
   // CONTEXT
-  const { currentUser, logout } = useUser();
+  const { currentUser, logout, signin, signup } = useUser();
   //
-  const signin = (email, password) => {
-    if (email && password) {
-      const auth = getAuth();
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in
-          const userq = userCredential;
-          // console.log(userq);
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
-    }
-  };
+  const contextValue = useMemo(() => {
+    return {
+      currentUser,
+      signin,
+      logout,
+      signup,
+    };
+  }, [signin, logout, signup]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        currentUser,
-        // email,
-        // password,
-        // setEmail,
-        // setPassword,
-        signin,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }
 

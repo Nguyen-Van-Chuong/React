@@ -6,6 +6,7 @@ import { TodoContext } from "../context";
 
 const Todos = () => {
   const { selectedProject, todos } = useContext(TodoContext);
+
   return (
     <div className="w-[450px] h-[80%] bg-white absolute bottom-10 left-10 rounded p-2 pt-0 opacity-[0.9] overflow-y-auto">
       <div className="my-4 capitalize text-[1.2rem] font-bold pb-0.5 border-blue-100 border-b-2">

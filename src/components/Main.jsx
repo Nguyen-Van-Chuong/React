@@ -18,10 +18,7 @@ const Main = ({ children }) => {
   };
 
   return (
-    <div
-      className="bg-[url('https://source.unsplash.com/random')] bg-cover bg-no-repeat w-full h-full relative"
-      ref={main}
-    >
+    <div className="relative w-full h-full " ref={main}>
       {children}
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Plus } from "react-bootstrap-icons";
 import {
   collection,
@@ -13,13 +13,18 @@ import { db } from "../firebase";
 //
 import Modal from "./Modal";
 import ProjectForm from "./ProjectForm";
+import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const AddNewProject = () => {
+  // CONTEXT
+  const { currentUser } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [projectName, setprojectName] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (projectName) {
+    if (projectName && currentUser) {
+      // Check same projectName
       const projectsRef = collection(db, "projects");
       const q = query(projectsRef, where("name", "==", projectName));
       const querySnapshot = await getDocs(q);
@@ -27,12 +32,17 @@ const AddNewProject = () => {
         setShowModal(false);
         await addDoc(projectsRef, {
           name: projectName,
+          userId: currentUser.uid,
         });
         setprojectName("");
       } else {
         // eslint-disable-next-line no-restricted-globals
-        alert("gsgsgsgsggs");
+
+        toast.info("The added project you have");
       }
+    } else {
+      toast.error("Login and enter the project name");
+      setprojectName("");
     }
   };
   return (

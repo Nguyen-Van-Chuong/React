@@ -18,13 +18,10 @@ const Sidebar = ({ children }) => {
     }
   };
   return (
-    <div
-      className="bg-white Sidebar w-[300px] min-w-[210px] h-full"
-      ref={sideBar}
-    >
+    <div className="bg-white w-[300px] h-full " ref={sideBar}>
       {children}
     </div>
   );
 };
-
+// bg-white w-[300px] h-full transform transition-transform ease-in-out duration-300 -translate-x-full sm:translate-x-0
 export default Sidebar;

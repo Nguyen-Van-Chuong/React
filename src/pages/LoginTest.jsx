@@ -1,72 +1,98 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  Input,
-  Modal,
-} from "@material-ui/core";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
 import { useContext, useState } from "react";
-import { auth } from "../firebase";
+import { useForm } from "react-hook-form";
+
 import { AuthContext } from "../context/AuthContext";
+import Modal from "../components/Modal";
+import { Link } from "react-router-dom";
+import Input from "../components/Input";
 
 const LoginTest = () => {
+  // const navigate = useNavigate();
+  // hook-form
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
   // state
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(true);
   // CONTEXT
-  const { currentUser, signin, logout } = useContext(AuthContext);
+  const { signin } = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if ((email, password)) {
-      signin(email, password);
-      setEmail("");
-      setPassword("");
-    }
+  // hook
+
+  // ANIMATION
+  // submit
+  const onSubmit = (data) => {
+    console.log(data);
+    const { email, password } = data;
+    signin(email, password);
   };
 
   return (
-    <div>
-      <Modal open={true}>
-        <div className="max-w-md m-auto">
-          {currentUser ? <div className="">{currentUser.uid}</div> : "signin"}
-          <form action="" onSubmit={handleSubmit}>
-            <input
+    <div className="transition-all">
+      <div className="flex items-center justify-center mt-4">
+        <button
+          class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-4/5"
+          onClick={() => setShowLogin(!showLogin)}
+        >
+          Login
+        </button>
+      </div>
+
+      <Modal showModal={showLogin} setShowModal={setShowLogin}>
+        <form
+          action=""
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-[500px] bg-white p-8 rounded-lg"
+        >
+          {" "}
+          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+            Login to your account
+          </h2>
+          <p className="mt-2 mb-5 text-sm text-center text-gray-600">
+            Don't have an account yet ?
+            <span className="font-medium text-blue-600 hover:text-blue-500">
+              <Link to="/signup"> signup</Link>
+            </span>
+          </p>
+          <div className="relative mb-6">
+            <Input
+              name="email"
               type="email"
-              className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+              register={register}
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              required={{
+                value: true,
+                message: "Email is required",
+              }}
             />
-            <input
+            <p className="absolute text-base text-red-600 top-full left-1">
+              {errors.email?.message}
+            </p>
+          </div>
+          <div className="relative mb-6">
+            <Input
+              name="password"
               type="password"
-              className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-              placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              register={register}
+              placeholder="Password"
+              required={{
+                value: true,
+                message: "Password is required",
+              }}
             />
-            <button type="submit">submit</button>
-            {auth?.currentUser?.email ? (
-              <button
-                className=""
-                onClick={() => {
-                  logout();
-                }}
-              >
-                Logout
-              </button>
-            ) : (
-              "login"
-            )}
-          </form>
-        </div>
+            <p className="absolute text-base text-red-600 top-full left-1">
+              {errors.password?.message}
+            </p>
+          </div>
+          <button
+            type="submit"
+            className="relative flex justify-center w-full px-4 py-2 mt-10 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md group hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Login
+          </button>
+        </form>
       </Modal>
     </div>
   );

@@ -1,29 +1,39 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import moment from "moment";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
-export function useTodos() {
+export function useTodos(userId) {
   const [todos, setTodos] = useState([]);
+
   useEffect(() => {
-    const todosRef = collection(db, "todos");
-    const unsubcribe = onSnapshot(todosRef, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setTodos(data);
-    });
-    return () => {
-      unsubcribe();
-    };
-  }, []);
+    // const todosRef = collection(db, "todos");
+    if (userId !== null && userId !== undefined) {
+      // Kiểm tra userId trước khi tạo truy vấn
+      const todosRef = query(
+        collection(db, "todos"),
+        where("userId", "==", userId)
+      );
+      const unsubcribe = onSnapshot(todosRef, (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setTodos(data);
+      });
+      return () => {
+        unsubcribe();
+      };
+    } else {
+      setTodos([]);
+    }
+  }, [userId]);
   return todos;
 }
 
 export function useFilterTodos(todos, selectedProject) {
   // state
+
   const [filteredTodos, setFilteredTodos] = useState([]);
   useEffect(() => {
     let data;
@@ -46,21 +56,29 @@ export function useFilterTodos(todos, selectedProject) {
   }, [todos, selectedProject]);
   return filteredTodos;
 }
-export function useProjects() {
+export function useProjects(userId) {
   const [projects, setProjects] = useState([]);
   useEffect(() => {
-    const todosRef = collection(db, "projects");
-    const unsubcribe = onSnapshot(todosRef, (doc) => {
-      const data = doc.docs.map((doc) => {
-        return {
-          id: doc.id,
-          name: doc.data().name,
-        };
+    if (userId !== null && userId !== undefined) {
+      // const projectsRef = collection(db, "projects");
+      const projectsRef = query(
+        collection(db, "projects"),
+        where("userId", "==", userId)
+      );
+      const unsubcribe = onSnapshot(projectsRef, (doc) => {
+        const data = doc.docs.map((doc) => {
+          return {
+            id: doc.id,
+            name: doc.data().name,
+          };
+        });
+        setProjects(data);
       });
-      setProjects(data);
-    });
-    return () => unsubcribe();
-  }, []);
+      return () => unsubcribe();
+    } else {
+      setProjects([]);
+    }
+  }, [userId]);
   return projects;
 }
 
@@ -79,31 +97,4 @@ export function useProjectsWithStats(projects, todos) {
     setProjectsWithStats(data);
   }, [projects, todos]);
   return projectsWithStats;
-}
-
-export function useUser() {
-  const [currentUser, setCurrentUser] = useState(null);
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUser(user);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
-  const logout = () => {
-    const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        setCurrentUser(null);
-        console.log("signout");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  return { currentUser, logout };
 }

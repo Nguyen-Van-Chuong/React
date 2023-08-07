@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext } from "react";
 import { useState } from "react";
 import {
   useFilterTodos,
@@ -7,6 +7,7 @@ import {
   useTodos,
   useUser,
 } from "../hooks";
+import { AuthContext } from "./AuthContext";
 const TodoContext = createContext();
 
 function TodoContextProvider({ children }) {
@@ -14,11 +15,19 @@ function TodoContextProvider({ children }) {
   const defaultProject = "today";
   const [selectedProject, setSelectedProject] = useState(defaultProject);
   const [selectedTodo, setSelectedTodo] = useState(undefined);
+  // CONTEXT
+  const { currentUser } = useContext(AuthContext);
+  console.log("🚀 --> TodoContextProvider --> currentUser:", currentUser);
+
   // HOOK
-  const todos = useTodos();
-  const projects = useProjects();
+  // if (currentUser) {
+
+  // }
+  const todos = useTodos(currentUser?.uid);
+  const projects = useProjects(currentUser?.uid);
   const projectsWithStats = useProjectsWithStats(projects, todos);
   const filteredTodos = useFilterTodos(todos, selectedProject);
+
   return (
     <TodoContext.Provider
       value={{

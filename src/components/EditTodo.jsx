@@ -18,6 +18,7 @@ const EditTodo = () => {
   function handleSubmit(e) {
     e.preventDefault();
   }
+
   useEffect(() => {
     if (selectedTodo) {
       setText(selectedTodo.text);

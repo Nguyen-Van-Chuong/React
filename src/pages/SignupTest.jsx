@@ -1,55 +1,165 @@
-import { Modal } from "@material-ui/core";
-import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import Input from "../components/Input";
+import { CheckLg } from "react-bootstrap-icons";
 
 const SignupTest = () => {
+  const navigate = useNavigate();
+
+  // CONTEXT
+  const { currentUser, signup } = useContext(AuthContext);
+  if (currentUser !== null) {
+    navigate("/");
+  }
+
   // state
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      //   console.log(email, password);
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorMessage);
-          // ..
-        });
-    } else {
-      console.log("object");
-    }
-    // createAccount();
+  // hook-form
+  const {
+    register,
+    watch,
+    getValues,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  const onSubmit = (data) => {
+    const { email, password } = data;
+    console.log(data);
+    // signup(email, password);
   };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (email && password) {
+  //     signup(email, password);
+  //     setEmail("");
+  //     setPassword("");
+  //   } else {
+  //     console.log("object");
+  //   }
+  //   // createAccount();
+  // };
   return (
-    <Modal open={true}>
-      <div className="max-w-md m-auto">
-        <form action="" onSubmit={handleSubmit}>
-          <input
-            type="email"
-            className="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+    <>
+      <ToastContainer />
+
+      <div className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-gray-900 bg-opacity-50 z-10 ">
+        <div className="absolute top-[25%] left-[50%] -translate-x-1/2 -translate-y-1/4 z-20">
+          <form
+            action=""
+            onSubmit={handleSubmit(onSubmit)}
+            className="p-4 bg-white rounded-lg lg:ml-6 lg:p-8"
+          >
+            <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
+              Signup to creat an account
+            </h2>
+            <p className="mt-2 mb-5 text-sm text-center text-gray-600">
+              Already have an account ?
+              <span className="font-medium text-blue-600 hover:text-blue-500">
+                <Link to="/login"> Signin</Link>
+              </span>
+            </p>
+            {/* <input
+            type="text"
+            className="relative block w-full px-3 py-2 my-5 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="First Name"
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <input
-            type="password"
-            className="rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
-            placeholder="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit">submit</button>
-        </form>
+            type="text"
+            className="relative block w-full px-3 py-2 my-5 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="Last name"
+            onChange={(e) => setlastName(e.target.value)}
+          /> */}
+            <div className="relative mb-6">
+              <Input
+                name="name"
+                type="text"
+                register={register}
+                placeholder="Username"
+                required={{
+                  value: true,
+                  message: "username is required",
+                }}
+              />
+              <p className="absolute text-base text-red-600 top-full left-1">
+                {errors.name?.message}
+              </p>
+            </div>
+            <div className="relative mb-6">
+              <Input
+                name="phone"
+                type="number"
+                register={register}
+                placeholder="Phone"
+                required={{
+                  value: true,
+                  message: "phone number is required",
+                }}
+              />
+              <p className="absolute text-base text-red-600 top-full left-1">
+                {errors.phone?.message}
+              </p>
+            </div>
+            <div className="relative mb-6">
+              <Input
+                name="email"
+                type="email"
+                register={register}
+                placeholder="Email"
+                required={{
+                  value: true,
+                  message: "Email is required",
+                }}
+              />
+              <p className="absolute text-base text-red-600 top-full left-1">
+                {errors.email?.message}
+              </p>
+            </div>
+            <div className="relative mb-6">
+              <Input
+                name="password"
+                type="password"
+                register={register}
+                placeholder="Password"
+                required={{
+                  value: true,
+                  message: "Password is required",
+                }}
+              />
+              <p className="absolute text-base text-red-600 top-full left-1">
+                {errors.password?.message}
+              </p>
+            </div>
+            <div className="relative mb-6">
+              <div className="my-5">
+                <input
+                  {...register("confirm_password", {
+                    validate: (value) =>
+                      value === watch("password") || "Passwords do not match", // Kiểm tra xem mật khẩu xác nhận có khớp với mật khẩu không
+                  })}
+                  type="password"
+                  className="w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none lock focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  name="confirm_password"
+                  placeholder="Confirm Password"
+                />
+              </div>
+              <p className="absolute text-base text-red-600 top-full left-1">
+                {errors?.confirm_password?.message}
+              </p>
+            </div>
+            <button
+              type="submit"
+              className="relative flex justify-center w-full px-4 py-2 mt-10 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md group hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              submit
+            </button>
+          </form>
+        </div>
       </div>
-    </Modal>
+    </>
   );
 };
 

@@ -5,7 +5,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { Button } from "@material-ui/core";
+import { useSpring, animated } from "react-spring";
 
 const TodoForm = ({
   hanleSubmit,
@@ -27,7 +27,7 @@ const TodoForm = ({
       <form
         action=""
         onSubmit={hanleSubmit}
-        className="bg-slate-100 p-4 w-[500px] rounded todoForm overflow-y-auto pb-10"
+        className="bg-slate-100 p-4 w-[500px] rounded todoForm overflow-y-auto pb-10 overflow-hidden duration-700 ease-in"
       >
         <div className="text">
           {heading && (
@@ -95,19 +95,18 @@ const TodoForm = ({
         {showButtons && (
           <>
             <div
-              className="absolute top-0 right-[5px] cursor-pointer"
+              className="absolute top-0 right-[5px] cursor-pointer "
               onClick={() => setShowModal(false)}
             >
               <X size={40} />
             </div>
-            <div className="absolute bottom-0 left-0 w-full confirm">
-              <Button
-                // variant="text"
-                color="primary"
-                className="w-full h-10 text-base font-semibold leading-3 bg-blue-400"
+            <div className=" confirm">
+              <button
+                type="submit"
+                className="absolute bottom-0 left-0 w-full h-10 text-base font-semibold leading-3 text-white bg-blue-500 hover:bg-blue-600"
               >
-                Hello World
-              </Button>
+                + add todo
+              </button>
               {/* <button>+ add to do</button> */}
             </div>
           </>

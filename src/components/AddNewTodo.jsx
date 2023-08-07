@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Modal from "./Modal";
@@ -12,10 +12,12 @@ import { doc, addDoc, collection } from "firebase/firestore";
 import TodoForm from "./TodoForm";
 import { TodoContext } from "../context";
 import { db } from "../firebase";
+import { AuthContext } from "../context/AuthContext";
 
 const AddNewTodo = () => {
   // context
   const { selectedProject, projects } = useContext(TodoContext);
+  const { currentUser } = useContext(AuthContext);
 
   // state
   const [showModal, setShowModal] = useState(false);
@@ -32,25 +34,13 @@ const AddNewTodo = () => {
     }
     return color;
   }
-  // const notify = () => toast.dark("Wow so easy!");
 
-  const showToast = () => {
-    toast.error("This is a success message!", {
-      position: "top-right",
-      autoClose: 3000, // Thời gian tự động đóng sau 3 giây
-      // hideProgressBar: false,
-      // closeOnClick: true,
-      // pauseOnHover: true,
-      // draggable: true,
-      // progress: undefined,
-    });
-  };
   function handleSubmit(e) {
     e.preventDefault();
-
     if (text && !calendarItems.includes(todoProject)) {
       const addFirebase = async () => {
         const docRef = await addDoc(collection(db, "todos"), {
+          userId: currentUser.uid,
           text: text,
           date: moment(day).format("MM/DD/YYYY"),
           day: moment(day).format("d"),
@@ -60,13 +50,23 @@ const AddNewTodo = () => {
           projectName: todoProject,
         });
       };
+      const currentDate = new Date();
+      if (time < currentDate) {
+        toast.error("Choose time in future", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
       addFirebase();
       setShowModal(false);
       setText("");
       setDay(new Date());
       setTime(new Date());
     } else {
-      showToast();
+      toast.error("Add Todo unsuccessful!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   }
   useEffect(() => {
@@ -76,7 +76,9 @@ const AddNewTodo = () => {
   return (
     <div className="border-b-[1px] border-gray-200 p-4">
       <button
-        className=" bg-blue-600 h-[70px] w-full rounded text-base font-bold text-white hover:opacity-60 transition-all"
+        className={`bg-blue-600 h-[70px] w-full rounded text-base font-bold text-white hover:opacity-60 transition-all ${
+          currentUser ? "visible" : "invisible"
+        }`}
         onClick={() => setShowModal(true)}
       >
         + New Todo

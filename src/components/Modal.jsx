@@ -11,9 +11,9 @@ const Modal = ({ children, showModal, setShowModal }) => {
   // ANIMATION
   const modalAnimation = useSpring({
     opacity: showModal ? 1 : 0,
-    // top: showModal ? "10%" : "100%",
+    top: showModal ? "25%" : "100%",
     // transform: showModal ? "translateY(100%)" : "translateY(0%)",
-    // config: { friction: 10 },
+    config: { friction: 10 },
   });
 
   return (
@@ -23,7 +23,7 @@ const Modal = ({ children, showModal, setShowModal }) => {
         ref={modalRef}
         onClick={closeModal}
       >
-        <animated.div style={modalAnimation} className="container">
+        <animated.div style={modalAnimation}>
           <div className="absolute top-[25%] left-[50%] -translate-x-1/2 -translate-y-1/4 z-20">
             {children}
           </div>
@@ -34,16 +34,3 @@ const Modal = ({ children, showModal, setShowModal }) => {
 };
 
 export default Modal;
-{
-  /* <div
-        className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-gray-900 bg-opacity-50 z-10 "
-        ref={modalRef}
-        onClick={closeModal}
-      >
-        <animated.div style={modalAnimation} className="container">
-          <div className="absolute top-[25%] left-[50%] -translate-x-1/2 -translate-y-1/4 z-20">
-            {children}
-          </div>
-        </animated.div>
-      </div> */
-}
