@@ -5,8 +5,9 @@ import { AuthContext } from "../context/AuthContext";
 import Modal from "../components/Modal";
 import { Link } from "react-router-dom";
 import Input from "../components/Input";
+import Spinner from "../components/Spinner";
 
-const LoginTest = () => {
+const LoginPage = () => {
   // const navigate = useNavigate();
   // hook-form
   const {
@@ -16,6 +17,7 @@ const LoginTest = () => {
   } = useForm();
   // state
   const [showLogin, setShowLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
   // CONTEXT
   const { signin } = useContext(AuthContext);
 
@@ -24,9 +26,12 @@ const LoginTest = () => {
   // ANIMATION
   // submit
   const onSubmit = (data) => {
-    console.log(data);
     const { email, password } = data;
-    signin(email, password);
+    setLoading(true);
+    setTimeout(() => {
+      signin(email, password);
+      setLoading(false);
+    }, 2000);
   };
 
   return (
@@ -86,16 +91,20 @@ const LoginTest = () => {
               {errors.password?.message}
             </p>
           </div>
-          <button
-            type="submit"
-            className="relative flex justify-center w-full px-4 py-2 mt-10 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md group hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Login
-          </button>
+          {loading ? (
+            <Spinner loading={loading}></Spinner>
+          ) : (
+            <button
+              type="submit"
+              className="relative flex justify-center w-full px-4 py-2 mt-10 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md group hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Login
+            </button>
+          )}
         </form>
       </Modal>
     </div>
   );
 };
 
-export default LoginTest;
+export default LoginPage;

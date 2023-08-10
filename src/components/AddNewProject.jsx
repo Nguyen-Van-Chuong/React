@@ -19,6 +19,8 @@ import { toast } from "react-toastify";
 const AddNewProject = () => {
   // CONTEXT
   const { currentUser } = useContext(AuthContext);
+  // STATE
+  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [projectName, setprojectName] = useState("");
   const handleSubmit = async (e) => {
@@ -26,18 +28,24 @@ const AddNewProject = () => {
     if (projectName && currentUser) {
       // Check same projectName
       const projectsRef = collection(db, "projects");
-      const q = query(projectsRef, where("name", "==", projectName));
+      const q = query(
+        projectsRef,
+        where("name", "==", projectName),
+        where("userId", "==", currentUser.uid)
+      );
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
-        setShowModal(false);
+        setLoading(true);
         await addDoc(projectsRef, {
           name: projectName,
           userId: currentUser.uid,
         });
+        setTimeout(() => {
+          setShowModal(false);
+          setLoading(false);
+        }, 2000);
         setprojectName("");
       } else {
-        // eslint-disable-next-line no-restricted-globals
-
         toast.info("The added project you have");
       }
     } else {
@@ -61,6 +69,7 @@ const AddNewProject = () => {
           setShowModal={setShowModal}
           setValue={setprojectName}
           confirmText={"+ add project"}
+          loading={loading}
         ></ProjectForm>
       </Modal>
     </div>

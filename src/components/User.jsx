@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
-import LoginTest from "../pages/LoginTest";
-import LoginPage from "../LoginPage/LoginPage";
+import LoginPage from "../pages/LoginPage";
 
 const User = () => {
   // const currentUser = false;
@@ -30,7 +28,7 @@ const User = () => {
           </div>
         </div>
       ) : (
-        <LoginTest></LoginTest>
+        <LoginPage></LoginPage>
       )}
     </>
   );

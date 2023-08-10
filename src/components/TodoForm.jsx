@@ -5,7 +5,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { useSpring, animated } from "react-spring";
+import Spinner from "./Spinner";
 
 const TodoForm = ({
   hanleSubmit,
@@ -21,6 +21,7 @@ const TodoForm = ({
   projects,
   showButtons = false,
   setShowModal = false,
+  loading,
 }) => {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -85,12 +86,6 @@ const TodoForm = ({
               {project.name}
             </div>
           ))}
-          {/* <div className="project active p-1.5 rounded border border-slate-500 m-1.5 hover:bg-blue-400 transition-all">
-            Personal
-          </div>
-          <div className="project p-1.5 rounded border border-slate-500 m-1.5 hover:bg-blue-400 transition-all">
-            work
-          </div> */}
         </div>
         {showButtons && (
           <>
@@ -100,14 +95,19 @@ const TodoForm = ({
             >
               <X size={40} />
             </div>
-            <div className=" confirm">
-              <button
-                type="submit"
-                className="absolute bottom-0 left-0 w-full h-10 text-base font-semibold leading-3 text-white bg-blue-500 hover:bg-blue-600"
-              >
-                + add todo
-              </button>
-              {/* <button>+ add to do</button> */}
+            <div className="confirm">
+              {loading ? (
+                <div className="absolute bottom-0 left-0 w-full">
+                  <Spinner></Spinner>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="absolute bottom-0 left-0 w-full h-10 text-base font-semibold leading-3 text-white transition-all ease-linear bg-blue-500 hover:bg-blue-600"
+                >
+                  + add todo
+                </button>
+              )}
             </div>
           </>
         )}

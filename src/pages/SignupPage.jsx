@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Input from "../components/Input";
-import { CheckLg } from "react-bootstrap-icons";
+import Spinner from "../components/Spinner";
 
-const SignupTest = () => {
+const SignupPage = () => {
   const navigate = useNavigate();
 
   // CONTEXT
@@ -16,31 +16,23 @@ const SignupTest = () => {
   }
 
   // state
-
+  const [loading, setLoading] = useState(false);
   // hook-form
   const {
     register,
     watch,
-    getValues,
     formState: { errors },
     handleSubmit,
   } = useForm();
   const onSubmit = (data) => {
-    const { email, password } = data;
+    const { email, confirm_password, name, phone } = data;
+    setLoading(true);
+    setTimeout(() => {
+      signup(email, confirm_password, name, phone);
+      setLoading(false);
+    }, 3000);
     console.log(data);
-    // signup(email, password);
   };
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (email && password) {
-  //     signup(email, password);
-  //     setEmail("");
-  //     setPassword("");
-  //   } else {
-  //     console.log("object");
-  //   }
-  //   // createAccount();
-  // };
   return (
     <>
       <ToastContainer />
@@ -61,18 +53,7 @@ const SignupTest = () => {
                 <Link to="/login"> Signin</Link>
               </span>
             </p>
-            {/* <input
-            type="text"
-            className="relative block w-full px-3 py-2 my-5 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-            placeholder="First Name"
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <input
-            type="text"
-            className="relative block w-full px-3 py-2 my-5 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-            placeholder="Last name"
-            onChange={(e) => setlastName(e.target.value)}
-          /> */}
+
             <div className="relative mb-6">
               <Input
                 name="name"
@@ -150,12 +131,16 @@ const SignupTest = () => {
                 {errors?.confirm_password?.message}
               </p>
             </div>
-            <button
-              type="submit"
-              className="relative flex justify-center w-full px-4 py-2 mt-10 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md group hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              submit
-            </button>
+            {loading ? (
+              <Spinner loading={loading}></Spinner>
+            ) : (
+              <button
+                type="submit"
+                className="relative flex justify-center w-full px-4 py-2 mt-10 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md group hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Login
+              </button>
+            )}
           </form>
         </div>
       </div>
@@ -163,4 +148,4 @@ const SignupTest = () => {
   );
 };
 
-export default SignupTest;
+export default SignupPage;

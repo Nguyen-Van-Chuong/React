@@ -1,12 +1,12 @@
+import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
 import { TodoContextProvider } from "./context";
 import { AuthContextProvider } from "./context/AuthContext";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LoginTest from "./pages/LoginTest";
-import SignupTest from "./pages/SignupTest";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -15,10 +15,10 @@ root.render(
       <AuthContextProvider>
         <TodoContextProvider>
           <Routes>
-            <Route path="/" element={<App />}>
-              <Route path="/login" element={<LoginTest />}></Route>
+            <Route path="/" element={<HomePage />}>
+              <Route path="/login" element={<LoginPage />}></Route>
             </Route>
-            <Route path="/signup" element={<SignupTest />}></Route>
+            <Route path="/signup" element={<SignupPage />}></Route>
           </Routes>
         </TodoContextProvider>
       </AuthContextProvider>

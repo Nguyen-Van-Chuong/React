@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import RenameProject from "./RenameProject";
-import { Pencil, XCircle, XLg } from "react-bootstrap-icons";
+import { Pencil, XCircle } from "react-bootstrap-icons";
 import Modal from "./Modal";
 import { TodoContext } from "../context";
 import {

@@ -5,7 +5,6 @@ import {
   useProjects,
   useProjectsWithStats,
   useTodos,
-  useUser,
 } from "../hooks";
 import { AuthContext } from "./AuthContext";
 const TodoContext = createContext();
@@ -17,8 +16,6 @@ function TodoContextProvider({ children }) {
   const [selectedTodo, setSelectedTodo] = useState(undefined);
   // CONTEXT
   const { currentUser } = useContext(AuthContext);
-  console.log("🚀 --> TodoContextProvider --> currentUser:", currentUser);
-
   // HOOK
   // if (currentUser) {
 

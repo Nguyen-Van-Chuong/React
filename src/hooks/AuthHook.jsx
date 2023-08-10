@@ -33,7 +33,7 @@ export function useUser() {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in
-          const userq = userCredential;
+          // const userq = userCredential;
 
           toast.success("Logged in successfully", {
             position: "top-right",
@@ -47,7 +47,6 @@ export function useUser() {
           navigate("/");
         })
         .catch((error) => {
-          const errorCode = error.code;
           const errorMessage = error.message;
           toast.error(errorMessage, {
             position: "top-right",
@@ -68,8 +67,8 @@ export function useUser() {
         console.log(error);
       });
   };
-  // còn thiếu  firstName, passWord, phone
-  const signup = (email, password) => {
+  const signup = (email, password, name, phone) => {
+    console.log(name, phone);
     const auth = getAuth();
 
     createUserWithEmailAndPassword(auth, email, password)
@@ -80,11 +79,9 @@ export function useUser() {
         const userDocRef = doc(db, "users", user.uid);
         await setDoc(userDocRef, {
           uid: user.uid,
+          userName: name,
           email: user.email,
-          // firstName: firstName,
-          // passWord: passWord,
-          // phone: phone,
-          // Thêm các trường thông tin khác của người dùng tại đây
+          phone: phone,
         });
         toast.success("Sign Up Success", {
           position: "top-right",
@@ -93,7 +90,6 @@ export function useUser() {
         navigate("/");
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage);
         toast.error(errorMessage, {

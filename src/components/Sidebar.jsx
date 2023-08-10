@@ -13,7 +13,7 @@ const Sidebar = ({ children }) => {
     return () => document.removeEventListener("click", handleClick);
   }, []);
   const handleClick = (e) => {
-    if (e.target == sideBar.current || sideBar.current.contains(e.target)) {
+    if (e.target === sideBar.current || sideBar.current.contains(e.target)) {
       setSelectedTodo(undefined);
     }
   };

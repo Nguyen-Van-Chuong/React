@@ -7,11 +7,10 @@ import Projects from "../components/Projects";
 import Main from "../components/Main";
 import Todos from "../components/Todos";
 import EditTodo from "../components/EditTodo";
-import { Outlet } from "react-router-dom";
 
-const Home = () => {
+const HomePage = () => {
   return (
-    <>
+    <div className="App flex w-[100vw] h-[100vh] overflow-hidden bg-[url('https://source.unsplash.com/random')] bg-cover bg-no-repeat">
       <ToastContainer />
       <Sidebar>
         <User></User>
@@ -23,8 +22,8 @@ const Home = () => {
         <Todos></Todos>
         <EditTodo></EditTodo>
       </Main>
-    </>
+    </div>
   );
 };
 
-export default Home;
+export default HomePage;

@@ -21,6 +21,7 @@ const AddNewTodo = () => {
 
   // state
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const [day, setDay] = useState(new Date());
   const [time, setTime] = useState(new Date());
@@ -50,23 +51,33 @@ const AddNewTodo = () => {
           projectName: todoProject,
         });
       };
-      const currentDate = new Date();
-      if (time < currentDate) {
-        toast.error("Choose time in future", {
+      // const currentDate = new Date();
+      // if (time < currentDate) {
+      //   toast.error("Choose time in future", {
+      //     position: "top-right",
+      //     autoClose: 3000,
+      //   });
+      //   return;
+      // } else {
+      // }
+      setLoading(true);
+      setTimeout(() => {
+        addFirebase();
+        setShowModal(false);
+        setText("");
+        setDay(new Date());
+        setTime(new Date());
+        setLoading(false);
+      }, 2000);
+    } else {
+      setLoading(true);
+      setTimeout(() => {
+        toast.error("Add Todo unsuccessful!", {
           position: "top-right",
           autoClose: 3000,
         });
-      }
-      addFirebase();
-      setShowModal(false);
-      setText("");
-      setDay(new Date());
-      setTime(new Date());
-    } else {
-      toast.error("Add Todo unsuccessful!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+        setLoading(false);
+      }, 2000);
     }
   }
   useEffect(() => {
@@ -99,6 +110,7 @@ const AddNewTodo = () => {
           setTime={setTime}
           showButtons="true"
           setShowModal={setShowModal}
+          loading={loading}
         />
       </Modal>
     </div>
