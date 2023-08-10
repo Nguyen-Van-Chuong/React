@@ -4,9 +4,17 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../firebase";
 import { useEffect, useState } from "react";
@@ -34,6 +42,7 @@ export function useUser() {
         .then((userCredential) => {
           // Signed in
           // const userq = userCredential;
+          console.log("🚀 --> .then --> userCredential:", userCredential);
 
           toast.success("Logged in successfully", {
             position: "top-right",
@@ -61,21 +70,19 @@ export function useUser() {
     signOut(auth)
       .then(() => {
         setCurrentUser(null);
-        console.log("signout");
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const signup = (email, password, name, phone) => {
-    console.log(name, phone);
+  const signup = async (email, password, name, phone) => {
     const auth = getAuth();
+    // Tạo một tài khoản người dùng trong bảng "users"
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // Tạo một tài khoản người dùng trong bảng "users"
         const userDocRef = doc(db, "users", user.uid);
         await setDoc(userDocRef, {
           uid: user.uid,
@@ -83,11 +90,15 @@ export function useUser() {
           email: user.email,
           phone: phone,
         });
+        await updateProfile(user, {
+          displayName: name,
+          phoneNumber: phone,
+        });
+
         toast.success("Sign Up Success", {
           position: "top-right",
           autoClose: 3000,
         });
-        navigate("/");
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -97,6 +108,7 @@ export function useUser() {
           autoClose: 3000,
         });
       });
+    navigate("/");
   };
 
   return { currentUser, logout, signin, signup };
